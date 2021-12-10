@@ -1,6 +1,3 @@
-import unittest
-
-
 def part_one(arr):
     count = 0
     for i in range(1, len(arr)):
@@ -20,21 +17,15 @@ def part_two(arr):
     return count
 
 
-def main():
+def read_input() -> list[int]:
     with open('input.txt', 'r') as f:
-        input = list(map(int, f.readlines()))
-        print(f'Part 1: {part_one(input)}')
-        print(f'Part 2: {part_two(input)}')
+        return list(map(int, f.readlines()))
 
 
-class TestCase(unittest.TestCase):
-    def test_part_one(self):
-        input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
-        self.assertEqual(part_one(input), 7)
-
-    def test_part_two(self):
-        input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
-        self.assertEqual(part_two(input), 5)
+def main():
+    nums = read_input()
+    print(f'Part 1: {part_one(nums)}')
+    print(f'Part 2: {part_two(nums)}')
 
 
 if __name__ == '__main__':
