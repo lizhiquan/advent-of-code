@@ -7,36 +7,34 @@ def read_input(filename):
 
 
 def part_one(risk_level_map):
-    d = {}
+    settled = set()
     pq = [(0, 0, 0)]  # (cost, i, j)
+    num_vertices = len(risk_level_map) * len(risk_level_map[0])
 
-    while pq:
+    while len(settled) < num_vertices:
         cost, i, j = heapq.heappop(pq)
+
+        if (i, j) in settled:
+            continue
 
         if i == len(risk_level_map) - 1 and j == len(risk_level_map[0]) - 1:
             return cost
 
-        d[(i, j)] = cost
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        settled.add((i, j))
 
-        for di, dj in directions:
-            new_i, new_j = i + di, j + dj
-            if new_i < 0 or new_j < 0 or new_i > len(risk_level_map) - 1 or new_j > len(risk_level_map[0]) - 1:
-                continue
-            if (new_i, new_j) in d:
+        for di, dj in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
+            neighbour_i, neighbour_j = i + di, j + dj
+
+            # out of bound check
+            if neighbour_i < 0 or neighbour_j < 0 or \
+                    neighbour_i > len(risk_level_map) - 1 or neighbour_j > len(risk_level_map[0]) - 1:
                 continue
 
-            in_pq = False
-            new_cost = cost + risk_level_map[new_i][new_j]
-            for pq_i in range(len(pq)):
-                c, ci, cj = pq[pq_i]
-                if ci == new_i and cj == new_j:
-                    in_pq = True
-                    if new_cost < c:
-                        pq[pq_i] = (new_cost, ci, cj)
-                        heapq.heapify(pq)
-            if not in_pq:
-                heapq.heappush(pq, (new_cost, new_i, new_j))
+            if (neighbour_i, neighbour_j) in settled:
+                continue
+
+            new_cost = cost + risk_level_map[neighbour_i][neighbour_j]
+            heapq.heappush(pq, (new_cost, neighbour_i, neighbour_j))
 
 
 def scale_map(risk_level_map, times):
