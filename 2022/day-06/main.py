@@ -1,25 +1,23 @@
-from collections import deque
 import unittest
 
 
 def solve(filename, length):
     with open(filename, "r") as f:
         buffer = f.readline()
-        s = set()
-        q = deque()
+        hm = {}
+        start = 0
         for i, c in enumerate(buffer):
-            q.append(c)
-
-            if c not in s:
-                s.add(c)
+            if c not in hm:
+                hm[c] = True
             else:
-                while True:
-                    p = q.popleft()
-                    if p == c:
+                for j in range(start, i):
+                    if buffer[j] != c:
+                        del hm[buffer[j]]
+                    else:
+                        start = j + 1
                         break
-                    s.remove(p)
 
-            if len(q) == length:
+            if i - start + 1 == length:
                 return i + 1
 
 
